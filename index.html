@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codename Engine Scripts</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --sidebar-bg: #1e1e1e;
+            --header-bg: #252526;
+            --text-color: #ffffff;
+            --accent-color: #a855f7; 
+            --accent-hover: #9333ea;
+            --card-bg: #2d2d2d;
+            --border-color: #3e3e3e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            height: 60px;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            margin-right: 20px;
+        }
+
+        .breadcrumb {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb span {
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        aside {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-item:hover {
+            background-color: #333;
+        }
+
+        .sidebar-item.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .sidebar-icon {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .home-view {
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .home-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .script-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .script-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .script-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .card-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            background-color: #000;
+            display: block;
+        }
+
+        .card-content {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--accent-color);
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 15px;
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .card-btn {
+            display: block;
+            background-color: var(--accent-color);
+            color: white;
+            text-align: center;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .card-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        #admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-box {
+            background-color: var(--header-bg);
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .admin-form-group {
+            margin-bottom: 15px;
+        }
+
+        .admin-form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .admin-form-group input, .admin-form-group select, .admin-form-group textarea {
+            width: 100%;
+            padding: 8px;
+            background: #333;
+            border: 1px solid #555;
+            color: white;
+            border-radius: 4px;
+        }
+        
+        .admin-form-group input:focus, .admin-form-group textarea:focus {
+            outline: 2px solid var(--accent-color);
+        }
+
+        .admin-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .admin-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .action-btn {
+            color: white;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            margin-left: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            min-width: 30px;
+        }
+        
+        .delete-btn {
+            background-color: #ff4444;
+        }
+        .delete-btn:hover {
+            background-color: #cc0000;
+        }
+
+        .edit-btn {
+            background-color: #3b82f6;
+        }
+        .edit-btn:hover {
+            background-color: #2563eb;
+        }
+
+        .move-btn {
+            background-color: #555;
+        }
+        .move-btn:hover {
+            background-color: #777;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 1.1rem;
+            margin-right: 15px;
+            padding-bottom: 5px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: white;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        #export-area {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+        }
+        #export-code {
+            width: 100%;
+            height: 100px;
+            background: #111;
+            color: #0f0;
+            font-family: monospace;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #333;
+            display: none;
+        }
+        
+        #admin-status {
+            min-height: 20px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #4f4;
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="brand">Codename Engine</div>
+    <div class="breadcrumb"> &gt; <span id="header-category">Home</span></div>
+</header>
+
+<div class="container">
+    <aside id="sidebar-container">
+        <!-- JS generates content -->
+    </aside>
+
+    <main id="main-content">
+        <!-- JS generates content -->
+    </main>
+</div>
+
+<div id="admin-panel" style="display: none;">
+    <div class="admin-box">
+        <div class="admin-header">
+            <h2>Admin Mode</h2>
+            <button onclick="closeAdmin()" class="admin-btn" style="background:#444">Close</button>
+        </div>
+        
+        <div id="admin-status"></div>
+
+        <div style="margin-bottom: 15px;">
+            <button class="tab-btn active" onclick="switchAdminTab('category')">Manage Subjects</button>
+            <button class="tab-btn" onclick="switchAdminTab('script')">Manage Scripts</button>
+            <button class="tab-btn" onclick="switchAdminTab('export')">Save & Export</button>
+        </div>
+
+        <div id="admin-category-section">
+            <div class="admin-form-group">
+                <label>Subject Name:</label>
+                <input type="text" id="new-cat-name" placeholder="e.g. Stage Scripts">
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button id="btn-save-cat" class="admin-btn" onclick="saveCategory()">Add Subject</button>
+                <button id="btn-cancel-cat" class="admin-btn" style="background:#666; display:none;" onclick="cancelCategoryEdit()">Cancel</button>
+            </div>
+            
+            <hr style="margin: 20px 0; border-color: #444;">
+            <h3>Existing Subjects:</h3>
+            <ul id="admin-cat-list" style="list-style: none; margin-top:10px;"></ul>
+        </div>
+
+        <div id="admin-script-section" style="display:none;">
+            <div class="admin-form-group">
+                <label>Title:</label>
+                <input type="text" id="new-script-title" placeholder="Script Name">
+            </div>
+            <div class="admin-form-group">
+                <label>Category:</label>
+                <select id="new-script-cat"></select>
+            </div>
+            <div class="admin-form-group">
+                <label>Description:</label>
+                <textarea id="new-script-desc" rows="3"></textarea>
+            </div>
+            <div class="admin-form-group">
+                <label>Image URL (Relative path, Link or GIF) - 1280x720 recommended:</label>
+                <input type="text" id="new-script-img" placeholder="assets/images/sample.png">
+            </div>
+            <div class="admin-form-group">
+                <label>Download Link:</label>
+                <input type="text" id="new-script-link" placeholder="assets/files/script.hx">
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button id="btn-save-script" class="admin-btn" onclick="saveScript()">Add Script</button>
+                <button id="btn-cancel-script" class="admin-btn" style="background:#666; display:none;" onclick="cancelScriptEdit()">Cancel</button>
+            </div>
+
+            <hr style="margin: 20px 0; border-color: #444;">
+            <h3>Existing Scripts:</h3>
+            <ul id="admin-script-list" style="list-style: none; margin-top:10px;"></ul>
+        </div>
+
+        <div id="admin-export-section" style="display:none;">
+            <h3>Save Changes to HTML</h3>
+            <p style="color:#ccc; margin-bottom:15px; font-size:0.9rem;">
+                Since browsers cannot modify the HTML file directly, please use this feature to generate a new HTML code containing all your changes.
+            </p>
+            <button class="admin-btn" onclick="generateHTML()">Generate HTML with Current Data</button>
+            <button class="admin-btn" onclick="copyHTML()" id="copy-btn" style="background:#444; margin-left:10px;" disabled>Copy to Clipboard</button>
+            
+            <textarea id="export-code" readonly placeholder="Generated HTML will appear here..."></textarea>
+        </div>
+    </div>
+</div>
+
+<script>
+    const defaultCategories = ["Home","Song Scripts","Main Scripts","Stage Scripts"];
+    
+    const defaultScripts = [{"id":1700000000001,"category":"Song Scripts","title":"Camera Move Script","desc":"Moves camera on note hit. Simple and effective.","img":"https://placehold.co/1280x720/222/FFF?text=Camera+Script","link":"#"},{"id":1700000000002,"category":"Main Scripts","title":"Custom HUD","desc":"A completely revamped HUD similar to psych engine.","img":"https://placehold.co/1280x720/444/FFF?text=HUD+Mod","link":"#"},{"id":1769045274876,"category":"Song Scripts","title":"V-Slice Long Notes","desc":"Change the long note specification to the V-Slice Engine specification.","img":"https://github.com/buruaru/Codename-Engine-Scripts/blob/main/SustainNote.gif?raw=true","link":"https://drive.google.com/uc?export=download&id=17sxWhc3uZwdqPQnTmCdmXZzPRHAylD2s"}];
+
+    let categories = JSON.parse(localStorage.getItem('ce_categories')) || defaultCategories;
+    let scripts = JSON.parse(localStorage.getItem('ce_scripts')) || defaultScripts;
+    let currentCategory = "Home";
+
+    let editingCategoryTarget = null;
+    let editingScriptId = null;
+
+    function saveData() {
+        localStorage.setItem('ce_categories', JSON.stringify(categories));
+        localStorage.setItem('ce_scripts', JSON.stringify(scripts));
+        renderSidebar();
+        renderMain();
+        if(document.getElementById('admin-panel').style.display === 'flex') {
+            updateAdminUI();
+        }
+    }
+
+    function renderSidebar() {
+        const sidebar = document.getElementById('sidebar-container');
+        sidebar.innerHTML = '';
+
+        categories.forEach(cat => {
+            const div = document.createElement('div');
+            div.className = `sidebar-item ${currentCategory === cat ? 'active' : ''}`;
+            div.innerHTML = `<span class="sidebar-icon">📄</span> ${cat}`;
+            div.onclick = () => {
+                currentCategory = cat;
+                renderSidebar();
+                renderMain();
+            };
+            sidebar.appendChild(div);
+        });
+    }
+
+    function renderMain() {
+        const main = document.getElementById('main-content');
+        const headerCat = document.getElementById('header-category');
+        
+        headerCat.textContent = currentCategory;
+        main.innerHTML = '';
+
+        if (currentCategory === 'Home') {
+            main.innerHTML = `
+                <div class="home-view">
+                    <div class="home-title">Scripts!! Enjoy:)</div>
+                    <p>Select a category from the sidebar to browse scripts.</p>
+                    
+                    <div style="margin-top: 40px;">
+                        <a href="https://codename-engine.com/" target="_blank">
+                            <img src="https://codename-engine.com/img/logo-banner.png" alt="Codename Engine Official" style="max-width: 500px; width: 100%; height: auto;">
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else {
+            const title = document.createElement('h1');
+            title.textContent = currentCategory;
+            main.appendChild(title);
+
+            const catScripts = scripts.filter(s => s.category === currentCategory);
+            
+            const grid = document.createElement('div');
+            grid.className = 'script-grid';
+
+            if (catScripts.length === 0) {
+                grid.innerHTML = '<p style="color:#666; margin-top:20px;">No scripts found in this category.</p>';
+            } else {
+                catScripts.forEach(script => {
+                    const card = document.createElement('div');
+                    card.className = 'script-card';
+                    card.innerHTML = `
+                        <img src="${script.img}" class="card-img" alt="${script.title}" onerror="this.src='https://placehold.co/1280x720/333/FFF?text=No+Image'">
+                        <div class="card-content">
+                            <div class="card-title">${script.title}</div>
+                            <div class="card-desc">${script.desc}</div>
+                            <a href="${script.link}" class="card-btn" download>DOWNLOAD</a>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+            main.appendChild(grid);
+        }
+    }
+
+    let keyBuffer = "";
+    const secretCode = "10015678";
+
+    document.addEventListener('keydown', (e) => {
+        keyBuffer += e.key;
+        if (keyBuffer.length > 20) keyBuffer = keyBuffer.slice(-20);
+        if (keyBuffer.includes(secretCode)) {
+            openAdmin();
+            keyBuffer = ""; 
+        }
+    });
+
+    function openAdmin() {
+        document.getElementById('admin-panel').style.display = 'flex';
+        cancelCategoryEdit();
+        cancelScriptEdit();
+        updateAdminUI();
+        switchAdminTab('category'); 
+    }
+
+    function closeAdmin() {
+        document.getElementById('admin-panel').style.display = 'none';
+        document.getElementById('admin-status').innerText = "";
+    }
+
+    function switchAdminTab(tab) {
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(t => t.classList.remove('active'));
+        
+        document.getElementById('admin-category-section').style.display = 'none';
+        document.getElementById('admin-script-section').style.display = 'none';
+        document.getElementById('admin-export-section').style.display = 'none';
+
+        if (tab === 'category') {
+            document.getElementById('admin-category-section').style.display = 'block';
+            tabs[0].classList.add('active');
+        } else if (tab === 'script') {
+            document.getElementById('admin-script-section').style.display = 'block';
+            tabs[1].classList.add('active');
+        } else if (tab === 'export') {
+            document.getElementById('admin-export-section').style.display = 'block';
+            tabs[2].classList.add('active');
+        }
+    }
+
+    function showStatus(msg, isError = false) {
+        const el = document.getElementById('admin-status');
+        el.innerText = msg;
+        el.style.color = isError ? '#ff4444' : '#4f4';
+        
+        setTimeout(() => {
+            if (el.innerText === msg) el.innerText = "";
+        }, 3000);
+    }
+
+    function updateAdminUI() {
+        const catList = document.getElementById('admin-cat-list');
+        catList.innerHTML = '';
+        categories.forEach((cat, index) => {
+            if (cat === 'Home') return;
+            const li = document.createElement('li');
+            li.style.display = "flex";
+            li.style.justifyContent = "space-between";
+            li.style.alignItems = "center";
+            li.style.marginBottom = '8px';
+            li.style.background = "#222";
+            li.style.padding = "5px 10px";
+            li.style.borderRadius = "4px";
+
+            const catSafe = cat.replace(/'/g, "\\'");
+            li.innerHTML = `
+                <span>${cat}</span> 
+                <div>
+                    <button class="action-btn move-btn" onclick="moveCategory('${catSafe}', -1)">↑</button>
+                    <button class="action-btn move-btn" onclick="moveCategory('${catSafe}', 1)">↓</button>
+                    <button class="action-btn edit-btn" onclick="editCategory('${catSafe}')">✎</button>
+                    <button class="action-btn delete-btn" onclick="deleteCategory(this, '${catSafe}')">✖</button>
+                </div>
+            `;
+            catList.appendChild(li);
+        });
+
+        const select = document.getElementById('new-script-cat');
+        const currentVal = select.value;
+        select.innerHTML = '';
+        categories.forEach(cat => {
+            if (cat === 'Home') return;
+            const opt = document.createElement('option');
+            opt.value = cat;
+            opt.textContent = cat;
+            select.appendChild(opt);
+        });
+        if(currentVal) select.value = currentVal;
+
+        const scriptList = document.getElementById('admin-script-list');
+        scriptList.innerHTML = '';
+        scripts.forEach((s, index) => {
+            const li = document.createElement('li');
+            li.style.display = "flex";
+            li.style.justifyContent = "space-between";
+            li.style.alignItems = "center";
+            li.style.marginBottom = '8px';
+            li.style.background = "#222";
+            li.style.padding = "5px 10px";
+            li.style.borderRadius = "4px";
+
+            li.innerHTML = `
+                <span><small style="color:#888">[${s.category}]</small> <b>${s.title}</b></span> 
+                <div>
+                    <button class="action-btn move-btn" onclick="moveScript(${s.id}, -1)">↑</button>
+                    <button class="action-btn move-btn" onclick="moveScript(${s.id}, 1)">↓</button>
+                    <button class="action-btn edit-btn" onclick="editScript(${s.id})">✎</button>
+                    <button class="action-btn delete-btn" onclick="deleteScript(this, ${s.id})">✖</button>
+                </div>
+            `;
+            scriptList.appendChild(li);
+        });
+    }
+
+    function saveCategory() {
+        const input = document.getElementById('new-cat-name');
+        const val = input.value.trim();
+        
+        if (!val) {
+            showStatus('Name cannot be empty', true);
+            return;
+        }
+
+        if (editingCategoryTarget) {
+            if (val !== editingCategoryTarget && categories.includes(val)) {
+                showStatus('Category name already exists', true);
+                return;
+            }
+
+            const idx = categories.indexOf(editingCategoryTarget);
+            if (idx !== -1) categories[idx] = val;
+
+            scripts.forEach(s => {
+                if (s.category === editingCategoryTarget) s.category = val;
+            });
+            
+            if (currentCategory === editingCategoryTarget) currentCategory = val;
+
+            showStatus(`Subject updated to "${val}"`);
+            cancelCategoryEdit();
+
+        } else {
+            if (categories.includes(val)) {
+                showStatus('Invalid or duplicate name', true);
+                return;
+            }
+            categories.push(val);
+            input.value = '';
+            showStatus(`Subject "${val}" added!`);
+        }
+        saveData();
+    }
+
+    function moveCategory(cat, direction) {
+        const idx = categories.indexOf(cat);
+        if (idx === -1) return;
+
+        const newIdx = idx + direction;
+        if (newIdx < 1 || newIdx >= categories.length) return;
+
+        [categories[idx], categories[newIdx]] = [categories[newIdx], categories[idx]];
+        saveData();
+    }
+
+    function editCategory(cat) {
+        editingCategoryTarget = cat;
+        document.getElementById('new-cat-name').value = cat;
+        document.getElementById('btn-save-cat').innerText = "Update Subject";
+        document.getElementById('btn-cancel-cat').style.display = "block";
+        window.scrollTo(0,0);
+    }
+
+    function cancelCategoryEdit() {
+        editingCategoryTarget = null;
+        document.getElementById('new-cat-name').value = '';
+        document.getElementById('btn-save-cat').innerText = "Add Subject";
+        document.getElementById('btn-cancel-cat').style.display = "none";
+    }
+
+    function deleteCategory(btn, cat) {
+        if (btn.innerText !== "Sure?") {
+            btn.innerText = "Sure?";
+            btn.style.backgroundColor = "#cc0000";
+            return;
+        }
+        categories = categories.filter(c => c !== cat);
+        if (currentCategory === cat) currentCategory = 'Home';
+        
+        if(editingCategoryTarget === cat) cancelCategoryEdit();
+        
+        saveData();
+        showStatus('Subject deleted.');
+    }
+
+    function saveScript() {
+        const title = document.getElementById('new-script-title').value;
+        const cat = document.getElementById('new-script-cat').value;
+        const desc = document.getElementById('new-script-desc').value;
+        const img = document.getElementById('new-script-img').value;
+        const link = document.getElementById('new-script-link').value;
+
+        if (!title || !cat) {
+            showStatus('Title and Category are required', true);
+            return;
+        }
+
+        if (editingScriptId) {
+            const idx = scripts.findIndex(s => s.id === editingScriptId);
+            if (idx !== -1) {
+                scripts[idx] = {
+                    id: editingScriptId,
+                    category: cat,
+                    title: title,
+                    desc: desc,
+                    img: img,
+                    link: link
+                };
+                showStatus(`Script "${title}" updated!`);
+                cancelScriptEdit();
+            }
+        } else {
+            const newScript = {
+                id: Date.now(),
+                category: cat,
+                title: title,
+                desc: desc,
+                img: img,
+                link: link
+            };
+            scripts.push(newScript);
+            
+            document.getElementById('new-script-title').value = '';
+            document.getElementById('new-script-desc').value = '';
+            document.getElementById('new-script-img').value = '';
+            document.getElementById('new-script-link').value = '';
+            
+            showStatus(`Script "${title}" added!`);
+        }
+
+        saveData();
+    }
+
+    function moveScript(id, direction) {
+        const idx = scripts.findIndex(s => s.id === id);
+        if (idx === -1) return;
+
+        const newIdx = idx + direction;
+        if (newIdx < 0 || newIdx >= scripts.length) return;
+
+        [scripts[idx], scripts[newIdx]] = [scripts[newIdx], scripts[idx]];
+        saveData();
+    }
+
+    function editScript(id) {
+        const s = scripts.find(script => script.id === id);
+        if (!s) return;
+
+        editingScriptId = id;
+        document.getElementById('new-script-title').value = s.title;
+        document.getElementById('new-script-cat').value = s.category;
+        document.getElementById('new-script-desc').value = s.desc;
+        document.getElementById('new-script-img').value = s.img;
+        document.getElementById('new-script-link').value = s.link;
+
+        document.getElementById('btn-save-script').innerText = "Update Script";
+        document.getElementById('btn-cancel-script').style.display = "block";
+        window.scrollTo(0,0);
+    }
+
+    function cancelScriptEdit() {
+        editingScriptId = null;
+        document.getElementById('new-script-title').value = '';
+        document.getElementById('new-script-desc').value = '';
+        document.getElementById('new-script-img').value = '';
+        document.getElementById('new-script-link').value = '';
+        
+        document.getElementById('btn-save-script').innerText = "Add Script";
+        document.getElementById('btn-cancel-script').style.display = "none";
+    }
+
+    function deleteScript(btn, id) {
+        if (btn.innerText !== "Sure?") {
+            btn.innerText = "Sure?";
+            btn.style.backgroundColor = "#cc0000";
+            return;
+        }
+        scripts = scripts.filter(s => s.id !== id);
+        
+        if(editingScriptId === id) cancelScriptEdit();
+
+        saveData();
+        showStatus('Script deleted.');
+    }
+
+    function generateHTML() {
+        const docClone = document.documentElement.outerHTML;
+        
+        const catJSON = JSON.stringify(categories);
+        const scriptJSON = JSON.stringify(scripts);
+
+        let newHTML = docClone.replace(
+            /const defaultCategories = \[.*?\];/s, 
+            `const defaultCategories = ${catJSON};`
+        );
+        newHTML = newHTML.replace(
+            /const defaultScripts = \[.*?\];/s, 
+            `const defaultScripts = ${scriptJSON};`
+        );
+
+        // Fix: Force admin panel to be hidden in exported code
+        newHTML = newHTML.replace(/id="admin-panel" style="[^"]*"/, 'id="admin-panel" style="display: none;"');
+        
+        const exportBox = document.getElementById('export-code');
+        exportBox.style.display = 'block';
+        exportBox.value = newHTML;
+        
+        document.getElementById('copy-btn').disabled = false;
+        document.getElementById('copy-btn').style.background = "var(--accent-color)";
+        showStatus('HTML Generated. Click Copy to save.');
+    }
+
+    function copyHTML() {
+        const copyText = document.getElementById("export-code");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); 
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                showStatus('Copied to clipboard!');
+            }).catch(err => {
+                document.execCommand('copy');
+                showStatus('Copied to clipboard (fallback)!');
+            });
+        } else {
+            document.execCommand('copy');
+            showStatus('Copied to clipboard (legacy)!');
+        }
+    }
+
+    renderSidebar();
+    renderMain();
+
+</script>
+
+</body>
+</html>
