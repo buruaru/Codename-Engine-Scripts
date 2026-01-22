@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
+<html lang="ja"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codename Engine Scripts</title>
@@ -339,17 +337,20 @@
 
 <header>
     <div class="brand">Codename Engine</div>
-    <div class="breadcrumb"> &gt; <span id="header-category">Home</span></div>
+    <div class="breadcrumb"> &gt; <span id="header-category">Song Scripts</span></div>
 </header>
 
 <div class="container">
-    <aside id="sidebar-container">
-        <!-- JS generates content -->
-    </aside>
+    <aside id="sidebar-container"><div class="sidebar-item "><span class="sidebar-icon">📄</span> Home</div><div class="sidebar-item active"><span class="sidebar-icon">📄</span> Song Scripts</div><div class="sidebar-item "><span class="sidebar-icon">📄</span> Main Scripts</div><div class="sidebar-item "><span class="sidebar-icon">📄</span> Stage Scripts</div><div class="sidebar-item "><span class="sidebar-icon">📄</span> State Scripts</div></aside>
 
-    <main id="main-content">
-        <!-- JS generates content -->
-    </main>
+    <main id="main-content"><h1>Song Scripts</h1><div class="script-grid"><div class="script-card">
+                        <img src="https://github.com/buruaru/Codename-Engine-Scripts/blob/main/SustainNote.gif?raw=true" class="card-img" alt="V-Slice Long Notes" onerror="this.src='https://placehold.co/1280x720/333/FFF?text=No+Image'">
+                        <div class="card-content">
+                            <div class="card-title">V-Slice Long Notes</div>
+                            <div class="card-desc">Change the long note specification to the V-Slice Engine specification.</div>
+                            <a href="https://drive.google.com/uc?export=download&amp;id=17sxWhc3uZwdqPQnTmCdmXZzPRHAylD2s" class="card-btn" download="">DOWNLOAD</a>
+                        </div>
+                    </div></div></main>
 </div>
 
 <div id="admin-panel" style="display: none;">
@@ -359,15 +360,15 @@
             <button onclick="closeAdmin()" class="admin-btn" style="background:#444">Close</button>
         </div>
         
-        <div id="admin-status"></div>
+        <div id="admin-status" style="color: rgb(68, 255, 68);"></div>
 
         <div style="margin-bottom: 15px;">
-            <button class="tab-btn active" onclick="switchAdminTab('category')">Manage Subjects</button>
+            <button class="tab-btn" onclick="switchAdminTab('category')">Manage Subjects</button>
             <button class="tab-btn" onclick="switchAdminTab('script')">Manage Scripts</button>
-            <button class="tab-btn" onclick="switchAdminTab('export')">Save & Export</button>
+            <button class="tab-btn active" onclick="switchAdminTab('export')">Save &amp; Export</button>
         </div>
 
-        <div id="admin-category-section">
+        <div id="admin-category-section" style="display: none;">
             <div class="admin-form-group">
                 <label>Subject Name:</label>
                 <input type="text" id="new-cat-name" placeholder="e.g. Stage Scripts">
@@ -379,17 +380,49 @@
             
             <hr style="margin: 20px 0; border-color: #444;">
             <h3>Existing Subjects:</h3>
-            <ul id="admin-cat-list" style="list-style: none; margin-top:10px;"></ul>
+            <ul id="admin-cat-list" style="list-style: none; margin-top:10px;"><li style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: rgb(34, 34, 34); padding: 5px 10px; border-radius: 4px;">
+                <span>Song Scripts</span> 
+                <div>
+                    <button class="action-btn move-btn" onclick="moveCategory('Song Scripts', -1)">↑</button>
+                    <button class="action-btn move-btn" onclick="moveCategory('Song Scripts', 1)">↓</button>
+                    <button class="action-btn edit-btn" onclick="editCategory('Song Scripts')">✎</button>
+                    <button class="action-btn delete-btn" onclick="deleteCategory(this, 'Song Scripts')">✖</button>
+                </div>
+            </li><li style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: rgb(34, 34, 34); padding: 5px 10px; border-radius: 4px;">
+                <span>Main Scripts</span> 
+                <div>
+                    <button class="action-btn move-btn" onclick="moveCategory('Main Scripts', -1)">↑</button>
+                    <button class="action-btn move-btn" onclick="moveCategory('Main Scripts', 1)">↓</button>
+                    <button class="action-btn edit-btn" onclick="editCategory('Main Scripts')">✎</button>
+                    <button class="action-btn delete-btn" onclick="deleteCategory(this, 'Main Scripts')">✖</button>
+                </div>
+            </li><li style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: rgb(34, 34, 34); padding: 5px 10px; border-radius: 4px;">
+                <span>Stage Scripts</span> 
+                <div>
+                    <button class="action-btn move-btn" onclick="moveCategory('Stage Scripts', -1)">↑</button>
+                    <button class="action-btn move-btn" onclick="moveCategory('Stage Scripts', 1)">↓</button>
+                    <button class="action-btn edit-btn" onclick="editCategory('Stage Scripts')">✎</button>
+                    <button class="action-btn delete-btn" onclick="deleteCategory(this, 'Stage Scripts')">✖</button>
+                </div>
+            </li><li style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: rgb(34, 34, 34); padding: 5px 10px; border-radius: 4px;">
+                <span>State Scripts</span> 
+                <div>
+                    <button class="action-btn move-btn" onclick="moveCategory('State Scripts', -1)">↑</button>
+                    <button class="action-btn move-btn" onclick="moveCategory('State Scripts', 1)">↓</button>
+                    <button class="action-btn edit-btn" onclick="editCategory('State Scripts')">✎</button>
+                    <button class="action-btn delete-btn" onclick="deleteCategory(this, 'State Scripts')">✖</button>
+                </div>
+            </li></ul>
         </div>
 
-        <div id="admin-script-section" style="display:none;">
+        <div id="admin-script-section" style="display: none;">
             <div class="admin-form-group">
                 <label>Title:</label>
                 <input type="text" id="new-script-title" placeholder="Script Name">
             </div>
             <div class="admin-form-group">
                 <label>Category:</label>
-                <select id="new-script-cat"></select>
+                <select id="new-script-cat"><option value="Song Scripts">Song Scripts</option><option value="Main Scripts">Main Scripts</option><option value="Stage Scripts">Stage Scripts</option><option value="State Scripts">State Scripts</option></select>
             </div>
             <div class="admin-form-group">
                 <label>Description:</label>
@@ -410,26 +443,34 @@
 
             <hr style="margin: 20px 0; border-color: #444;">
             <h3>Existing Scripts:</h3>
-            <ul id="admin-script-list" style="list-style: none; margin-top:10px;"></ul>
+            <ul id="admin-script-list" style="list-style: none; margin-top:10px;"><li style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: rgb(34, 34, 34); padding: 5px 10px; border-radius: 4px;">
+                <span><small style="color:#888">[Song Scripts]</small> <b>V-Slice Long Notes</b></span> 
+                <div>
+                    <button class="action-btn move-btn" onclick="moveScript(1769045274876, -1)">↑</button>
+                    <button class="action-btn move-btn" onclick="moveScript(1769045274876, 1)">↓</button>
+                    <button class="action-btn edit-btn" onclick="editScript(1769045274876)">✎</button>
+                    <button class="action-btn delete-btn" onclick="deleteScript(this, 1769045274876)">✖</button>
+                </div>
+            </li></ul>
         </div>
 
-        <div id="admin-export-section" style="display:none;">
+        <div id="admin-export-section" style="display: block;">
             <h3>Save Changes to HTML</h3>
             <p style="color:#ccc; margin-bottom:15px; font-size:0.9rem;">
                 Since browsers cannot modify the HTML file directly, please use this feature to generate a new HTML code containing all your changes.
             </p>
             <button class="admin-btn" onclick="generateHTML()">Generate HTML with Current Data</button>
-            <button class="admin-btn" onclick="copyHTML()" id="copy-btn" style="background:#444; margin-left:10px;" disabled>Copy to Clipboard</button>
+            <button class="admin-btn" onclick="copyHTML()" id="copy-btn" style="background: var(--accent-color); margin-left: 10px;">Copy to Clipboard</button>
             
-            <textarea id="export-code" readonly placeholder="Generated HTML will appear here..."></textarea>
+            <textarea id="export-code" readonly="" placeholder="Generated HTML will appear here..." style="display: block;"></textarea>
         </div>
     </div>
 </div>
 
 <script>
-    const defaultCategories = ["Home","Song Scripts","Main Scripts","Stage Scripts"];
+    const defaultCategories = ["Home","Song Scripts","Main Scripts","Stage Scripts","State Scripts"];
     
-    const defaultScripts = [{"id":1700000000001,"category":"Song Scripts","title":"Camera Move Script","desc":"Moves camera on note hit. Simple and effective.","img":"https://placehold.co/1280x720/222/FFF?text=Camera+Script","link":"#"},{"id":1700000000002,"category":"Main Scripts","title":"Custom HUD","desc":"A completely revamped HUD similar to psych engine.","img":"https://placehold.co/1280x720/444/FFF?text=HUD+Mod","link":"#"},{"id":1769045274876,"category":"Song Scripts","title":"V-Slice Long Notes","desc":"Change the long note specification to the V-Slice Engine specification.","img":"https://github.com/buruaru/Codename-Engine-Scripts/blob/main/SustainNote.gif?raw=true","link":"https://drive.google.com/uc?export=download&id=17sxWhc3uZwdqPQnTmCdmXZzPRHAylD2s"}];
+    const defaultScripts = [{"id":1769045274876,"category":"Song Scripts","title":"V-Slice Long Notes","desc":"Change the long note specification to the V-Slice Engine specification.","img":"https://github.com/buruaru/Codename-Engine-Scripts/blob/main/SustainNote.gif?raw=true","link":"https://drive.google.com/uc?export=download&id=17sxWhc3uZwdqPQnTmCdmXZzPRHAylD2s"}];
 
     let categories = JSON.parse(localStorage.getItem('ce_categories')) || defaultCategories;
     let scripts = JSON.parse(localStorage.getItem('ce_scripts')) || defaultScripts;
@@ -865,5 +906,5 @@
 
 </script>
 
-</body>
-</html>
+
+<deepl-input-controller translate="no"></deepl-input-controller><div id="ahXPitXciTgUPRT" style="color-scheme: initial; forced-color-adjust: initial; mask: initial; math-depth: initial; position: relative; position-anchor: initial; text-size-adjust: initial; appearance: initial; color: initial; font: initial; font-palette: initial; font-synthesis: initial; position-area: initial; text-orientation: initial; text-rendering: initial; text-spacing-trim: initial; -webkit-font-smoothing: initial; -webkit-locale: initial; -webkit-text-orientation: initial; -webkit-writing-mode: initial; writing-mode: initial; zoom: initial; accent-color: initial; place-content: initial; place-items: initial; place-self: initial; alignment-baseline: initial; anchor-name: initial; anchor-scope: initial; animation-composition: initial; animation: initial; app-region: initial; aspect-ratio: initial; backdrop-filter: initial; backface-visibility: initial; background: initial; background-blend-mode: initial; baseline-shift: initial; baseline-source: initial; block-size: initial; border-block: initial; border: initial; border-radius: initial; border-collapse: initial; border-end-end-radius: initial; border-end-start-radius: initial; border-inline: initial; border-start-end-radius: initial; border-start-start-radius: initial; inset: initial; box-decoration-break: initial; box-shadow: initial; box-sizing: initial; break-after: initial; break-before: initial; break-inside: initial; buffered-rendering: initial; caption-side: initial; caret-animation: initial; caret-color: initial; clear: initial; clip: initial; clip-path: initial; clip-rule: initial; color-interpolation: initial; color-interpolation-filters: initial; color-rendering: initial; columns: initial; column-fill: initial; gap: initial; column-rule: initial; column-span: initial; contain: initial; contain-intrinsic-block-size: initial; contain-intrinsic-size: initial; contain-intrinsic-inline-size: initial; container: initial; content: initial; content-visibility: initial; corner-shape: initial; corner-block-end-shape: initial; corner-block-start-shape: initial; counter-increment: initial; counter-reset: initial; counter-set: initial; cursor: initial; cx: initial; cy: initial; d: initial; display: initial; dominant-baseline: initial; dynamic-range-limit: initial; empty-cells: initial; field-sizing: initial; fill: initial; fill-opacity: initial; fill-rule: initial; filter: initial; flex: initial; flex-flow: initial; float: initial; flood-color: initial; flood-opacity: initial; grid: initial; grid-area: initial; height: initial; hyphenate-character: initial; hyphenate-limit-chars: initial; hyphens: initial; image-orientation: initial; image-rendering: initial; initial-letter: initial; inline-size: initial; inset-block: initial; inset-inline: initial; interest-delay: initial; interpolate-size: initial; isolation: initial; letter-spacing: initial; lighting-color: initial; line-break: initial; list-style: initial; margin-block: initial; margin: initial; margin-inline: initial; marker: initial; mask-type: initial; math-shift: initial; math-style: initial; max-block-size: initial; max-height: initial; max-inline-size: initial; max-width: initial; min-block-size: initial; min-height: initial; min-inline-size: initial; min-width: initial; mix-blend-mode: initial; object-fit: initial; object-position: initial; object-view-box: initial; offset: initial; opacity: initial; order: initial; orphans: initial; outline: initial; outline-offset: initial; overflow-anchor: initial; overflow-block: initial; overflow-clip-margin: initial; overflow-inline: initial; overflow-wrap: initial; overflow: initial; overlay: initial; overscroll-behavior-block: initial; overscroll-behavior-inline: initial; overscroll-behavior: initial; padding-block: initial; padding: initial; padding-inline: initial; page: initial; page-orientation: initial; paint-order: initial; perspective: initial; perspective-origin: initial; pointer-events: initial; position-try: initial; position-visibility: initial; print-color-adjust: initial; quotes: initial; r: initial; reading-flow: initial; reading-order: initial; resize: initial; rotate: initial; ruby-align: initial; ruby-position: initial; rx: initial; ry: initial; scale: initial; scroll-behavior: initial; scroll-initial-target: initial; scroll-margin-block: initial; scroll-margin: initial; scroll-margin-inline: initial; scroll-marker-group: initial; scroll-padding-block: initial; scroll-padding: initial; scroll-padding-inline: initial; scroll-snap-align: initial; scroll-snap-stop: initial; scroll-snap-type: initial; scroll-target-group: initial; scroll-timeline: initial; scrollbar-color: initial; scrollbar-gutter: initial; scrollbar-width: initial; shape-image-threshold: initial; shape-margin: initial; shape-outside: initial; shape-rendering: initial; size: initial; speak: initial; stop-color: initial; stop-opacity: initial; stroke: initial; stroke-dasharray: initial; stroke-dashoffset: initial; stroke-linecap: initial; stroke-linejoin: initial; stroke-miterlimit: initial; stroke-opacity: initial; stroke-width: initial; tab-size: initial; table-layout: initial; text-align: initial; text-align-last: initial; text-anchor: initial; text-autospace: initial; text-box: initial; text-combine-upright: initial; text-decoration: initial; text-decoration-skip-ink: initial; text-emphasis: initial; text-emphasis-position: initial; text-indent: initial; text-overflow: initial; text-shadow: initial; text-transform: initial; text-underline-offset: initial; text-underline-position: initial; text-wrap: initial; timeline-scope: initial; touch-action: initial; transform: initial; transform-box: initial; transform-origin: initial; transform-style: initial; transition: initial; translate: initial; user-select: initial; vector-effect: initial; vertical-align: initial; view-timeline: initial; view-transition-class: initial; view-transition-group: initial; view-transition-name: initial; visibility: initial; border-spacing: initial; -webkit-box-align: initial; -webkit-box-decoration-break: initial; -webkit-box-direction: initial; -webkit-box-flex: initial; -webkit-box-ordinal-group: initial; -webkit-box-orient: initial; -webkit-box-pack: initial; -webkit-box-reflect: initial; -webkit-line-break: initial; -webkit-line-clamp: initial; -webkit-mask-box-image: initial; -webkit-rtl-ordering: initial; -webkit-ruby-position: initial; -webkit-tap-highlight-color: initial; -webkit-text-combine: initial; -webkit-text-decorations-in-effect: initial; -webkit-text-fill-color: initial; -webkit-text-security: initial; -webkit-text-stroke: initial; -webkit-user-drag: initial; white-space-collapse: initial; widows: initial; width: initial; will-change: initial; word-break: initial; word-spacing: initial; x: initial; y: initial; z-index: 2147483647;"><div style="all: initial;"></div></div></body></html>
